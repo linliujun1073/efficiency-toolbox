@@ -1,0 +1,71 @@
+/* ==================== 基础样式 ==================== */
+.task-card { transition: all 0.2s ease; }
+.task-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); }
+.priority-high { background-color: #fee2e2; color: #dc2626; border-color: #fecaca; }
+.priority-medium { background-color: #fef3c7; color: #d97706; border-color: #fde68a; }
+.priority-low { background-color: #dbeafe; color: #2563eb; border-color: #bfdbfe; }
+.category-work { background-color: #dbeafe; color: #1d4ed8; }
+.category-study { background-color: #dcfce7; color: #16a34a; }
+.category-life { background-color: #fce7f3; color: #9d174d; }
+.category-other { background-color: #f3f4f6; color: #4b5563; }
+.status-pending { background-color: #fef3c7; color: #d97706; }
+.status-in-progress { background-color: #dbeafe; color: #2563eb; }
+.status-due-soon { background-color: #fed7aa; color: #ea580c; }
+.status-expired { background-color: #fee2e2; color: #dc2626; }
+.status-completed { background-color: #dcfce7; color: #16a34a; }
+.task-checkbox { width: 24px; height: 24px; cursor: pointer; accent-color: #6366f1; }
+.task-actions button { transition: all 0.2s ease; }
+.task-actions button:hover { transform: scale(1.1); }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+#task-modal.show { display: flex; }
+#task-modal.show .bg-white { animation: fadeIn 0.3s ease; }
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; border-radius: 3px; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+@media (max-width: 640px) { .task-content { flex-direction: column; align-items: flex-start; } .task-meta { margin-top: 0.5rem; margin-left: 0 !important; } }
+.task-completed .task-title { text-decoration: line-through; color: #9ca3af; }
+.task-completed .task-description { color: #9ca3af; }
+
+/* ==================== Tab 导航样式 ==================== */
+.tab-btn { background-color: transparent; color: #6b7280; border: 1px solid #e5e7eb; }
+.tab-btn:hover { background-color: #eef2ff; color: #4f46e5; }
+.tab-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; }
+
+/* ==================== 番茄钟样式 ==================== */
+.duration-btn { background-color: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+.duration-btn:hover { background-color: #e5e7eb; color: #374151; }
+.duration-btn.active { background-color: #6366f1; color: white; border-color: #6366f1; }
+.timer-ring { transition: all 0.3s ease; }
+#progress-ring { transition: stroke-dashoffset 1s linear, stroke 0.3s ease; }
+#timer-display { font-variant-numeric: tabular-nums; }
+
+/* ==================== 工具面板切换动画 ==================== */
+.tool-panel { transition: opacity 0.3s ease-in-out; }
+.tool-panel.hidden { display: none; }
+
+/* ==================== 历史记录模态框动画 ==================== */
+@keyframes slideIn { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+#history-modal:not(.hidden) { animation: slideIn 0.3s ease; }
+
+/* ==================== 按钮交互增强 ==================== */
+button { cursor: pointer; user-select: none; }
+button:active:not(:disabled) { transform: scale(0.98); }
+button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ==================== 统计数字动画 ==================== */
+#today-focus-count, #today-focus-duration, #week-focus-count, #week-focus-duration, #total-focus-count, #total-focus-duration { font-variant-numeric: tabular-nums; transition: all 0.3s ease; }
+
+/* ==================== 提示音开关样式 ==================== */
+#sound-switch, #sound-knob { cursor: pointer; }
+
+/* ==================== 响应式优化 ==================== */
+@media (max-width: 768px) {
+    .tab-btn { font-size: 0.75rem; padding: 0.5rem 1rem; }
+    .duration-btn { font-size: 0.75rem; padding: 0.375rem 0.75rem; }
+    .timer-ring svg { width: 200px; height: 200px; }
+    #timer-display { font-size: 2.5rem; }
+    #today-focus-count, #today-focus-duration, #week-focus-count, #week-focus-duration, #total-focus-count, #total-focus-duration { font-size: 1.5rem; }
+}
+@media (prefers-color-scheme: dark) { }
+@media print { button, .tab-btn, .duration-btn { display: none; } .tool-panel { display: block !important; opacity: 1 !important; } }

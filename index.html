@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>生活效率工具箱</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+  </head>
+  <body>
+    <div class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <header class="bg-white shadow-sm">
+            <div class="max-w-6xl mx-auto px-4 py-4">
+                <div class="flex items-center justify-between mb-4">
+                    <h1 class="text-2xl font-bold text-gray-800 flex items-center">
+                        <i class="fa fa-check-square-o mr-3 text-indigo-600"></i>
+                        生活效率工具箱
+                    </h1>
+                    <button id="add-task-btn" class="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 transition-all duration-200 flex items-center">
+                        <i class="fa fa-plus mr-2"></i>
+                        添加任务
+                    </button>
+                </div>
+                <div class="flex gap-2">
+                    <button id="tab-todo" class="tab-btn active px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">
+                        <i class="fa fa-list-ul mr-2"></i>待办清单
+                    </button>
+                    <button id="tab-pomodoro" class="tab-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300">
+                        <i class="fa fa-clock-o mr-2"></i>专注番茄钟
+                    </button>
+                </div>
+            </div>
+        </header>
+        <main class="max-w-6xl mx-auto px-4 py-6">
+            <div id="todo-panel" class="tool-panel">
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">今日完成</p>
+                                <p id="today-completed" class="text-2xl font-bold text-green-600">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                <i class="fa fa-calendar-check-o text-green-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">本周完成率</p>
+                                <p id="week-completion" class="text-2xl font-bold text-blue-600">0%</p>
+                            </div>
+                            <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                <i class="fa fa-chart-pie text-blue-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">待处理</p>
+                                <p id="pending-count" class="text-2xl font-bold text-yellow-600">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                <i class="fa fa-clock-o text-yellow-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-xl shadow-sm p-4">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <p class="text-sm text-gray-500">即将到期</p>
+                                <p id="due-soon-count" class="text-2xl font-bold text-orange-600">0</p>
+                            </div>
+                            <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                                <i class="fa fa-bell-o text-orange-600 text-xl"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+                    <h2 class="text-lg font-semibold text-gray-800 mb-4">分类占比</h2>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-blue-500 mr-2"></div>
+                            <span class="text-sm text-gray-600">工作</span>
+                            <span id="cat-work" class="ml-2 font-semibold text-gray-800">0%</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-green-500 mr-2"></div>
+                            <span class="text-sm text-gray-600">学习</span>
+                            <span id="cat-study" class="ml-2 font-semibold text-gray-800">0%</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-purple-500 mr-2"></div>
+                            <span class="text-sm text-gray-600">生活</span>
+                            <span id="cat-life" class="ml-2 font-semibold text-gray-800">0%</span>
+                        </div>
+                        <div class="flex items-center">
+                            <div class="w-3 h-3 rounded-full bg-gray-500 mr-2"></div>
+                            <span class="text-sm text-gray-600">其他</span>
+                            <span id="cat-other" class="ml-2 font-semibold text-gray-800">0%</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-4 mb-6">
+                    <div class="flex flex-wrap items-center gap-4">
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-600">分类:</span>
+                            <select id="filter-category" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                <option value="all">全部</option>
+                                <option value="work">工作</option>
+                                <option value="study">学习</option>
+                                <option value="life">生活</option>
+                                <option value="other">其他</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-600">状态:</span>
+                            <select id="filter-status" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                <option value="all">全部</option>
+                                <option value="pending">待处理</option>
+                                <option value="in-progress">进行中</option>
+                                <option value="due-soon">即将到期</option>
+                                <option value="expired">已过期</option>
+                                <option value="completed">已完成</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-sm text-gray-600">排序:</span>
+                            <select id="sort-by" class="border border-gray-300 rounded-lg px-3 py-2 text-sm">
+                                <option value="created-desc">创建时间(新到旧)</option>
+                                <option value="created-asc">创建时间(旧到新)</option>
+                                <option value="priority">优先级</option>
+                                <option value="due-date">截止日期</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div id="task-list" class="space-y-4"></div>
+                <div id="empty-state" class="bg-white rounded-xl shadow-sm p-12 text-center hidden">
+                    <i class="fa fa-list-alt text-gray-300 text-6xl mb-4"></i>
+                    <p id="empty-title" class="text-gray-500 text-lg">暂无任务</p>
+                    <p id="empty-desc" class="text-gray-400 text-sm mt-2">点击右上角添加你的第一个任务</p>
+                </div>
+            </div>
+            <div id="pomodoro-panel" class="tool-panel hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
+                    <div class="lg:col-span-2">
+                        <div class="bg-white rounded-xl shadow-sm p-8">
+                            <div class="flex flex-wrap gap-2 mb-6">
+                                <button class="duration-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" data-duration="15">15分钟</button>
+                                <button class="duration-btn active px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" data-duration="25">25分钟</button>
+                                <button class="duration-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" data-duration="30">30分钟</button>
+                                <button class="duration-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" data-duration="45">45分钟</button>
+                                <button class="duration-btn px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200" data-duration="60">60分钟</button>
+                            </div>
+                            <div class="text-center mb-8">
+                                <div class="relative inline-block">
+                                    <svg class="timer-ring transform -rotate-90" width="240" height="240">
+                                        <circle cx="120" cy="120" r="110" fill="none" stroke="#e5e7eb" stroke-width="8"/>
+                                        <circle id="progress-ring" cx="120" cy="120" r="110" fill="none" stroke="#3b82f6" stroke-width="8" stroke-linecap="round" stroke-dasharray="691.15" stroke-dashoffset="0"/>
+                                    </svg>
+                                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                                        <span id="timer-display" class="text-5xl font-bold text-gray-800 mb-2">25:00</span>
+                                        <span id="timer-status" class="text-sm text-gray-500">准备开始</span>
+                                        <span id="focus-count" class="text-xs text-gray-400 mt-1">第 1 个番茄</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="flex justify-center gap-4 mb-6">
+                                <button id="start-btn" class="bg-indigo-600 text-white px-8 py-3 rounded-lg hover:bg-indigo-700 transition-all duration-200 flex items-center">
+                                    <i class="fa fa-play mr-2"></i>开始专注
+                                </button>
+                                <button id="reset-btn" class="bg-gray-200 text-gray-700 px-8 py-3 rounded-lg hover:bg-gray-300 transition-all duration-200 hidden">
+                                    <i class="fa fa-refresh mr-2"></i>重置
+                                </button>
+                            </div>
+                            <div class="flex items-center justify-center gap-2">
+                                <label class="flex items-center cursor-pointer">
+                                    <input type="checkbox" id="sound-toggle" class="sr-only" checked>
+                                    <div class="relative w-10 h-6 bg-gray-300 rounded-full transition-colors duration-200" id="sound-switch">
+                                        <div class="absolute left-0 top-0 w-6 h-6 bg-white rounded-full shadow transform transition-transform duration-200 translate-x-0" id="sound-knob"></div>
+                                    </div>
+                                    <span class="ml-3 text-sm text-gray-600">提示音</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="space-y-6">
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fa fa-calendar text-indigo-600 mr-2"></i>今日统计</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">专注次数</span>
+                                    <span id="today-focus-count" class="text-2xl font-bold text-indigo-600">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">总专注时长</span>
+                                    <span id="today-focus-duration" class="text-2xl font-bold text-indigo-600">0分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fa fa-calendar-week text-indigo-600 mr-2"></i>本周统计</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">专注次数</span>
+                                    <span id="week-focus-count" class="text-2xl font-bold text-indigo-600">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">总专注时长</span>
+                                    <span id="week-focus-duration" class="text-2xl font-bold text-indigo-600">0分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="bg-white rounded-xl shadow-sm p-6">
+                            <h3 class="text-lg font-semibold text-gray-800 mb-4"><i class="fa fa-history text-indigo-600 mr-2"></i>累计统计</h3>
+                            <div class="space-y-4">
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">总专注次数</span>
+                                    <span id="total-focus-count" class="text-2xl font-bold text-indigo-600">0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-gray-600">总专注时长</span>
+                                    <span id="total-focus-duration" class="text-2xl font-bold text-indigo-600">0分钟</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white rounded-xl shadow-sm p-6">
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-lg font-semibold text-gray-800"><i class="fa fa-list-alt text-indigo-600 mr-2"></i>历史记录</h3>
+                        <button id="view-all-history" class="text-indigo-600 hover:text-indigo-700 text-sm font-medium">查看更多</button>
+                    </div>
+                    <div id="history-list" class="space-y-3">
+                        <p class="text-gray-400 text-center py-4">暂无专注记录，开始你的第一次专注吧！</p>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <div id="confirm-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-sm mx-4">
+                <div class="p-6">
+                    <div class="text-center mb-4">
+                        <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                            <i class="fa fa-exclamation-triangle text-red-500 text-2xl"></i>
+                        </div>
+                        <h3 id="confirm-title" class="text-lg font-semibold text-gray-800">确认删除</h3>
+                        <p id="confirm-message" class="text-gray-500 mt-2">确定要删除这个任务吗？</p>
+                    </div>
+                    <div class="flex gap-3">
+                        <button id="confirm-cancel" class="flex-1 border border-gray-300 text-gray-700 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors">取消</button>
+                        <button id="confirm-ok" class="flex-1 bg-red-500 text-white rounded-lg px-4 py-2 hover:bg-red-600 transition-colors">确认删除</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="task-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-md mx-4 max-h-[90vh] overflow-y-auto">
+                <div class="p-6">
+                    <div class="flex items-center justify-between mb-6">
+                        <h2 id="modal-title" class="text-xl font-semibold text-gray-800">添加任务</h2>
+                        <button id="close-modal" class="text-gray-400 hover:text-gray-600"><i class="fa fa-times text-xl"></i></button>
+                    </div>
+                    <form id="task-form" class="space-y-4">
+                        <input type="hidden" id="task-id">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">任务标题 <span class="text-red-500">*</span></label>
+                            <input type="text" id="task-title" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="请输入任务标题" maxlength="100" required>
+                            <p class="text-xs text-gray-400 mt-1">1-100个字符</p>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-1">任务描述</label>
+                            <textarea id="task-description" class="w-full border border-gray-300 rounded-lg px-3 py-2" placeholder="请输入任务描述" maxlength="500" rows="3"></textarea>
+                            <p class="text-xs text-gray-400 mt-1">最多500个字符</p>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">分类标签</label>
+                                <select id="task-category" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                    <option value="work">工作</option>
+                                    <option value="study">学习</option>
+                                    <option value="life">生活</option>
+                                    <option value="other">其他</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">优先级</label>
+                                <select id="task-priority" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                                    <option value="high">高</option>
+                                    <option value="medium">中</option>
+                                    <option value="low">低</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">截止日期</label>
+                                <input type="date" id="task-due-date" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">提醒时间</label>
+                                <input type="time" id="task-reminder" class="w-full border border-gray-300 rounded-lg px-3 py-2">
+                            </div>
+                        </div>
+                        <div class="flex gap-3 pt-4">
+                            <button type="button" id="cancel-btn" class="flex-1 border border-gray-300 text-gray-700 rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors">取消</button>
+                            <button type="submit" class="flex-1 bg-indigo-600 text-white rounded-lg px-4 py-2 hover:bg-indigo-700 transition-colors">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div id="history-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white rounded-xl shadow-xl w-full max-w-2xl mx-4 max-h-[80vh] overflow-hidden">
+                <div class="p-6 border-b">
+                    <div class="flex items-center justify-between">
+                        <h2 class="text-xl font-semibold text-gray-800">专注历史记录</h2>
+                        <button id="close-history-modal" class="text-gray-400 hover:text-gray-600"><i class="fa fa-times text-xl"></i></button>
+                    </div>
+                </div>
+                <div id="history-modal-content" class="p-6 overflow-y-auto" style="max-height: calc(80vh - 120px);"></div>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
